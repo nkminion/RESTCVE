@@ -19,10 +19,22 @@ async def CreateCVE(Payload: Schema.CVECreate, DB: AsyncSession = Depends(GetDB)
 	return NewCVE
 
 @Router.get('/cves', response_model=List[Schema.CVEResponse])
-async def GetCVEs(Status: Optional[str] = None, DB: AsyncSession = Depends(GetDB)):
+async def GetCVEs(CVEID: Optional[str] = None, Status: Optional[str] = None, TargetOS: Optional[str] = None, TargetArch: Optional[str] = None, MinCVSSScore: Optional[float] = None, MaxCVSSSCore: Optional[float] = None, DB: AsyncSession = Depends(GetDB)):
 	Query = select(Model.CVE)
-	if Status is not None:
+	if CVEID:
+		Query = Query.where(Model.CVE.cveid == CVEID)
+	if Status:
 		Query = Query.where(Model.CVE.status == Status)
+	if TargetOS:
+		Query = Query.where(Model.CVE.target_os == TargetOS)
+	if TargetArch:
+		Query = Query.where(Model.CVE.target_arch == TargetArch)
+
+	if MinCVSSScore:
+		Query = Query.where(Model.CVE.cvss_score >= MinCVSSScore)
+	if MaxCVSSSCore:
+		Query = Query.where(Model.CVE.cvss_score <= MaxCVSSSCore)
+
 	ResRows = await DB.execute(Query)
 	return ResRows.scalars().all()
 
