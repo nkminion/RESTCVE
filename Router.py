@@ -4,7 +4,7 @@ from sqlalchemy import select
 from typing import List,Optional
 import Model
 import Schema
-from Datasbase import GetDB
+from Database import GetDB
 
 Router = APIRouter()
 
@@ -16,6 +16,7 @@ async def CreateCVE(Payload: Schema.CVECreate, DB: AsyncSession = Depends(GetDB)
 	NewCVE = Model.CVE(**Payload.model_dump())
 	DB.add(NewCVE)
 	await DB.commit()
+	await DB.refresh(NewCVE)
 	return NewCVE
 
 @Router.get('/cves', response_model=List[Schema.CVEResponse])

@@ -10,5 +10,5 @@ create table if not exists cves(
 	notes TEXT
 );
 
-CREATE INDEX CVESTATIDX ON cves(STATUS);
-CREATE INDEX CVETARIDX ON cves(TARGETOS);
+CREATE INDEX CVESTATIDX ON cves(status);
+CREATE INDEX CVETARIDX ON cves(target_os);

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Text, Numeric
-from Datasbase import Base
+from Database import Base
 
 class CVE(Base):
     __tablename__ = "cves"
@@ -10,5 +10,5 @@ class CVE(Base):
     cvss_score = Column(Numeric(4, 2), nullable=False)
     target_os = Column(String(100))
     target_arch = Column(String(50))
-    status = Column(String(50), default="Open", index=True)
+    status = Column(String(50), default="open", index=True)
     notes = Column(Text)
